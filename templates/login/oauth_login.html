@@ -1,0 +1,37 @@
+{% extends 'layout2.html' %}
+
+{% block content %}
+<div class="container mt-5" style="min-height: 600px; display: flex; align-items: center; justify-content: center;">
+    <form action="{{url_for('google_choose')}}" method="POST" id="userTypeForm" class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h2 class="card-title">Doctor</h2>
+                    <p class="card-text">Select to login as Doctor and access your dashboard, manage patients, and view appointments.</p>
+                    <div>
+                        <input type="radio" id="doctorRadio" name="userType" value="doctor">
+                        <label for="doctorRadio">Login as Doctor</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h2 class="card-title">Patient</h2>
+                    <p class="card-text">Select to login as Patient and access your medical records, book appointments, and communicate with your doctor.</p>
+                    <div>
+                        <input type="radio" id="patientRadio" name="userType" value="patient">
+                        <label for="patientRadio">Login as Patient</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 text-center mt-4">
+            <button type="submit" class="btn btn-primary">Continue</button>
+        </div>
+    </form>
+</div>
+
+
+{% endblock %}
