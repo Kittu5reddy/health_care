@@ -446,5 +446,5 @@ def logout():
 
 
 
-if __name__=='__main__':
-   app.run(debug=True,port=3961) 
+# if __name__=='__main__':
+#    app.run(debug=True,port=3961) 
