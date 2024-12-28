@@ -1,198 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Online HealthCare</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="script.js"></script>
-    {% block css %}
-      
-    {% endblock  %}
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
-      crossorigin="anonymous"
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&display=swap" rel="stylesheet">
-    <script
-      src="https://kit.fontawesome.com/8a3d976fe3.js"
-      crossorigin="anonymous"
-    ></script>
-  </head>
-
-
-  <body
-  style="
-    background-image: url(../static/images/bg.jpg);
-    background-repeat: no-repeat;
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{% endblock  %}
+  </title>
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+  {% block css %}{% endblock %}
+</head>
+<style>
+  /* Add a background image */
+  body {
+    background-image: url('../static/images/bg.jpg'); /* Replace with your image URL */
     background-size: cover;
-  "
->
-    <style>
-      .navbar-nav .nav-link {
-        font-size: 1.2rem; /* Adjust link font size */
-      }
-    
-      .btn {
-        font-size: 1.2rem; /* Adjust button font size */
-      }
-      .navbar-toggler {
-        border: none; /* Optional, for a cleaner look */
-    }
-    .navbar-toggler-icon {
-        color: black; /* Adjust color for visibility */
-    }
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+  }
+</style>
+<body>
 
-    </style>
-    <style>
-      @media (max-width: 768px) {
-          body {
-              background-color: #f8f9fa; /* Test for small screen changes */
-          }
-      }
-  </style>
-    
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-      <div class="container-fluid">
-        <img src="../static/images/logo.svg" alt="" style="width: 70px; height: 7 0px;">
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav me-auto">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="{{ url_for('homePage') }}">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('aboutPage') }}">ABOUT</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('servicesPage') }}">SERVICES</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('donatePage') }}">DONATE</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('contactPage') }}">CONTACT US</a>
-            </li>
-          </ul>
-          <div class="d-flex">
-   
-            <a href="{{url_for('loginPage')}}" class="btn btn-primary me-1">LOGIN</a>
-            <a href="{{url_for('signupPage')}}" class="btn btn-success">SIGNUP</a>
-            
-          </div>
-        </div>
-      </div>
-    </nav>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <!-- Replace the text "MyPropertyGuru" with an image -->
+    <a class="navbar-brand" href="#">
+      <img src="../static/images/logo.svg" alt="MyPropertyGuru" height="40"> <!-- Replace with your logo image -->
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <!-- Align navbar items to the left -->
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="{{url_for('homePage')}}">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{url_for('aboutPage')}}">About</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{url_for('servicesPage')}}">Services</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{url_for('donatePage')}}">Contact</a>
+        </li>
+      </ul>
       
+      <!-- Align buttons to the right -->
+      <div class="d-flex">
+        <a href="{{url_for('loginPage')}}" class="btn btn-primary me-1">Login</a>
+        <a href="{{url_for('signupPage')}}" class="btn btn-success">Sign Up</a>
+      </div>
+    </div>
+  </nav>
   {% block content %}
   
-  {% endblock  %}
-<!-- Remove the container if you want to extend the Footer to full width. -->
-<div class="with-footer">
-  <footer class="bg-dark text-center text-white">
-    <!-- Social media section -->
-    <div class="container p-4">
-      <section class="mb-4">
-        <!-- Facebook -->
-        <a
-          class="btn btn-outline-light btn-floating m-1"
-          href="#!"
-          role="button"
-        >
-          <i class="fab fa-facebook-f"></i>
-        </a>
+  {% endblock %}
+  
+  <!-- Footer Section -->
+  <div class="with-footer">
+    <footer class="bg-dark text-center text-white">
+      <!-- Social media section -->
+      <div class="container p-4">
+        <section class="mb-4">
+          <!-- Facebook -->
+          <a class="btn btn-outline-light btn-floating m-1" href="" role="button">
+            <i class="fab fa-facebook-f"></i>
+          </a>
 
-        <!-- Twitter -->
-        <a
-          class="btn btn-outline-light btn-floating m-1"
-          href="#!"
-          role="button"
-        >
-          <i class="fab fa-twitter"></i>
-        </a>
+          <!-- Twitter -->
+          <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button">
+            <i class="fab fa-twitter"></i>
+          </a>
 
-        <!-- Google -->
-        <a
-          class="btn btn-outline-light btn-floating m-1"
-          href="#!"
-          role="button"
-        >
-          <i class="fab fa-google"></i>
-        </a>
+          <!-- Google -->
+          <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button">
+            <i class="fab fa-google"></i>
+          </a>
 
-        <!-- Instagram -->
-        <a
-          class="btn btn-outline-light btn-floating m-1"
-          href="#!"
-          role="button"
-        >
-          <i class="fab fa-instagram"></i>
-        </a>
+          <!-- Instagram -->
+          <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button">
+            <i class="fab fa-instagram"></i>
+          </a>
 
-        <!-- LinkedIn -->
-        <a
-          class="btn btn-outline-light btn-floating m-1"
-          href="#!"
-          role="button"
-        >
-          <i class="fab fa-linkedin-in"></i>
-        </a>
+          <!-- LinkedIn -->
+          <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button">
+            <i class="fab fa-linkedin-in"></i>
+          </a>
 
-        <!-- GitHub -->
-        <a
-          class="btn btn-outline-light btn-floating m-1"
-          href="#!"
-          role="button"
-        >
-          <i class="fab fa-github"></i>
-        </a>
-      </section>
-    </div>
+          <!-- GitHub -->
+          <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button">
+            <i class="fab fa-github"></i>
+          </a>
+        </section>
+      </div>
 
-    <!-- Copyright -->
-    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
-      © 2024 Copyright:
-      <a class="text-white" href="https://example.com/">YourWebsite.com</a>
-    </div>
-  </footer>
-</div>
+      <!-- Copyright -->
+      <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+        © 2024 Copyright:
+        <a class="text-white" href="https://example.com/">YourWebsite.com</a>
+      </div>
+    </footer>
+  </div>
 
-<!-- Add Bootstrap and FontAwesome -->
-<link
-  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-  rel="stylesheet"
-/>
-<script
-  src="https://kit.fontawesome.com/a076d05399.js"
-  crossorigin="anonymous"
-></script>
-<script>
-  window.embeddedChatbotConfig = {
-      chatbotId: "Y6IXUhT69KqQ3MNVGn1hp",
-      domain: "www.chatbase.co"
-  }
-</script>
-<script src="//code.tidio.co/luaadwvdof4p0bztqna3othi22pnnalk.js" async></script>
-<script>
-  document.querySelector('.navbar-toggler').addEventListener('click', () => {
-    console.log('Navbar toggler clicked');
-});
-</script>
+  <!-- Bootstrap JS and dependencies -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

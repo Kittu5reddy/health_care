@@ -1,5 +1,7 @@
 {% extends 'layout2.html' %}
-
+{% block title %}
+	google
+{% endblock  %}
 {% block content %}
 <div class="container mt-5" style="min-height: 600px; display: flex; align-items: center; justify-content: center;">
     <form action="{{url_for('google_choose')}}" method="POST" id="userTypeForm" class="row">

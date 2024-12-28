@@ -1,12 +1,14 @@
 {% extends 'layout2.html' %}
-
+{% block title %}
+	Profile
+{% endblock  %}
 {% block content %}
 
 <section style="background-color: #eee;">
     <div class="container py-5">
         <!-- Edit Button -->
         <div class="d-flex justify-content-start mb-4">
-          <button type="button" onclick="window.location.href='{{ url_for('doctorProfileUpdate') }}'" class="btn btn-secondary mb-3">Edit</button>
+          <button type="button" onclick="window.location.href="{{ url_for('doctorProfileUpdate')}}" class="btn btn-secondary mb-3">Edit</button>
         </div>
 
         <div class="row">
