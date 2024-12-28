@@ -25,7 +25,7 @@ import string
  
 #app config
 app=Flask(__name__)
-app.config['MONGO_URI'] = mongodb.url
+app.config['MONGO_URI'] = mongodb['url']
 mongo = PyMongo(app)
 bycrypt = Bcrypt(app)
 app.config['SECRET_KEY'] = 'your_secret_key_here'  
