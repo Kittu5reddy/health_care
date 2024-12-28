@@ -4,8 +4,11 @@ from flask_session import Session
 from flask_bcrypt import Bcrypt
 
 
+
+
 #database
 from flask_pymongo import PyMongo
+from api_keys import mongodb
 
 #Form imports
 from forms import SignupForm
@@ -19,10 +22,10 @@ import random
 import string
 
 
-
+ 
 #app config
 app=Flask(__name__)
-app.config['MONGO_URI'] = 'mongodb://localhost:27017/healthcare'
+app.config['MONGO_URI'] = mongodb.url
 mongo = PyMongo(app)
 bycrypt = Bcrypt(app)
 app.config['SECRET_KEY'] = 'your_secret_key_here'  
@@ -31,18 +34,20 @@ app.config['GOOGLE_CLIENT_SECRET'] = google_keys['client_secret']
 app.config['GOOGLE_DISCOVERY_URL'] = 'https://accounts.google.com/.well-known/openid-configuration'
 
 
+from datetime import timedelta
 
 
 
 #session config
 app.config['SESSION_TYPE'] = 'mongodb'
-app.config['SESSION_PERMANENT'] = False
+app.config['SESSION_PERMANENT'] = True 
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=1)  
 app.config['SESSION_USE_SIGNER'] = True
 app.config['SESSION_MONGODB'] = mongo.cx
-app.config['SESSION_MONGODB_DB'] = 'healthcare'
+app.config['SESSION_MONGODB_DB'] = 'health_care'
 app.config['SESSION_MONGODB_COLLECT'] = 'sessions'
-Session(app)
 
+Session(app)
 
 
 
@@ -446,5 +451,5 @@ def logout():
 
 
 
-# if __name__=='__main__':
-#    app.run(debug=True,port=3961) 
+if __name__=='__main__':
+   app.run(debug=True,port=3961) 
