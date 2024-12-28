@@ -1,4 +1,4 @@
-python=3.11.11
+
 Authlib==1.4.0
 bcrypt==4.2.1
 blinker==1.9.0
