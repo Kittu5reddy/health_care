@@ -7,3 +7,8 @@ google_keys = {
     "client_secret":"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",
     "redirect_uris":["http://127.0.0.1:3961/google/authorize"]
 }
+
+
+mongodb={
+    "url":"mongodb+srv://22eg107c61:kaushik@cluster0.x4y4x.mongodb.net/health_care?retryWrites=true&w=majority"
+}
