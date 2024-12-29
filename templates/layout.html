@@ -7,6 +7,7 @@
   </title>
   <!-- Bootstrap CSS -->
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="shortcut icon" href="../static/images/logo.svg" type="image/x-icon">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
   {% block css %}{% endblock %}
 </head>
@@ -49,9 +50,9 @@
       </ul>
       
       <!-- Align buttons to the right -->
-      <div class="d-flex">
+      <div class="d-flex space-between">
         <a href="{{url_for('loginPage')}}" class="btn btn-primary me-1">Login</a>
-        <a href="{{url_for('signupPage')}}" class="btn btn-success">Sign Up</a>
+        <a href="{{url_for('signupPage')}}" class="btn btn-success" >Sign Up</a>
       </div>
     </div>
   </nav>

@@ -11,7 +11,7 @@ from flask_pymongo import PyMongo
 from api_keys import mongodb
 
 #Form imports
-from forms import SignupForm
+from forms import SignupForm,DoctorProfileForm
 
 
 
@@ -190,67 +190,6 @@ def contactPage():
 
 
 
-##
-##
-#DASHBOARD PAGES
-##
-##
-@app.route('/dashboard')
-def dashboardPage():
-    if session.get('email') is None:
-        return redirect(url_for('loginPage'))
-    if session.get('is_doctor'):
-        if mongo.db.doctors_profile.find_one({'email':session.get('email')}):
-            data = mongo.db.doctors_profile.find_one({'email':session.get('email')})
-            return render_template('/dashboards/doctor/doctorprofile.html',data=data)
-        else:
-            return redirect(url_for('doctorProfileUpdate'))
-    else:
-        if mongo.db.patient_profile.find_one({'email':session.get('email')}):
-            data = mongo.db.patient_profile.find_one({'email':session.get('email')})
-            return render_template('/dashboards/patient/patientprofile.html',data=data)
-        else:
-            return redirect(url_for('patientUpdateProfilePage'))
-    
-
-
-@app.route('/dashboardaaa')
-def dashboardPages():
-    return render_template('/dashboards/profile.html')
-
-@app.route('/dashboard/doctor/update')
-def doctorProfileUpdate():
-    return render_template('/dashboards/doctor/patientprofileupdate.html')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     
 #login Pages
 #patientLoginPage
@@ -275,6 +214,128 @@ def loginPage():
         else:
             return render_template('/login/login.html', message="User not found")
     return render_template('/login/login.html')
+
+
+
+
+
+
+##
+##
+#DASHBOARD PAGES
+##  
+##
+# @app.route('/dashboard')
+# def dashboardPage():
+#     if session.get('email') is None:
+#         return redirect(url_for('loginPage'))
+#     if session.get('is_doctor'):
+#         if mongo.db.doctors_profile.find_one({'email':session.get('email')}):
+#             data = mongo.db.doctors_profile.find_one({'email':session.get('email')})
+#             return render_template('/dashboards/doctor/doctor-profile.html',data=data)
+#         else:
+#             return redirect(url_for('doctorProfileUpdate'))
+#     # else:
+#     #     if mongo.db.patient_profile.find_one({'email':session.get('email')}):
+#     #         data = mongo.db.patient_profile.find_one({'email':session.get('email')})
+#     #         return render_template('/dashboards/doctor/patientprofile.html',data=data)
+#     #     else:
+#     #         return redirect(url_for('patientUpdateProfilePage'))
+#     return render_template('/dashboards/profile.html')
+
+
+@app.route('/dashboard')
+def dashboardPage():
+    if session.get('email') is None:
+        return redirect(url_for('loginPage'))
+    
+    email = session.get('email')
+    
+    if session.get('is_doctor'):
+        doctor_data = mongo.db.doctors_profile.find_one({'email': email})
+        if doctor_data:
+            return render_template('/dashboards/doctor/doctor-profile.html', doctor=doctor_data)
+        else:
+            return redirect(url_for('doctorProfileUpdate'))
+    else:
+        patient_data = mongo.db.patient_profile.find_one({'email': email})
+        if patient_data:
+            return render_template('/dashboards/patient/patientprofile.html', data=patient_data)
+        else:
+            return redirect(url_for('patientProfileUpdate'))
+    return render_template('/dashboards/profile.html')  # Fallback for unexpected cases
+
+@app.route('/doctor/profile/update', methods=['GET', 'POST'])
+def doctorProfileUpdate():
+    print(1)
+    
+    form = DoctorProfileForm()
+    email = session.get('email')
+    
+    if not email:
+        flash("Unauthorized access. Please log in.", "danger")
+        return redirect(url_for('loginPage'))
+    
+    doctor = mongo.db.doctors_profile.find_one({'email': email})
+    
+    if request.method == 'POST':
+        print(2)
+        if form.validate_on_submit():
+            print(3)
+            profile_data = {
+                'name': form.name.data.upper(),
+                'specialization': form.specialization.data.upper(),
+                'experience': form.experience.data,
+                'qualifications': form.qualifications.data.upper(),
+                'contact_number': form.contact_number.data,
+                'clinic_hospital': form.clinic_hospital.data.upper(),
+                'address': form.address.data.upper(),
+                  # Handle image upload appropriately
+            }
+            print(profile_data)
+            
+            if doctor:
+                mongo.db.doctors_profile.update_one({'email': email}, {'$set': profile_data})
+            else:
+                print('jiii')
+                profile_data['email'] = email
+                mongo.db.doctors_profile.insert_one(profile_data)
+            
+            flash("Profile updated successfully!", "success")
+            return redirect(url_for('dashboardPage'))
+        else:
+            flash("Please correct the errors in the form.", "danger")
+    
+    # Populate form fields with existing data if available
+    if doctor:
+        form.name.data = doctor.get('name')
+        form.specialization.data = doctor.get('specialization')
+        form.experience.data = doctor.get('experience')
+        form.qualifications.data = doctor.get('qualifications')
+        form.contact_number.data = doctor.get('contact_number')
+        form.clinic_hospital.data = doctor.get('clinic_hospital')
+        form.address.data = doctor.get('address')
+    
+    return render_template('/dashboards/doctor/doctorprofileupdate.html', form=form, doctor=doctor)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -381,24 +442,6 @@ def topDoctorsPage():
 
 
 
-
-
-
-
-
-
-
-
-
-#profile Pages
-#patientProfilePage
-@app.route('/profile/patients/update')
-def patientUpdateProfilePage():
-    return render_template('/dashboards/patient/patientprofileupdate.html')
-#doctorProfilePage
-@app.route('/profile/doctor/update')
-def doctoeUpdateProfilePage():
-    return render_template('/dashboards/patient/doctorprofileupdate.html')
 
 
 

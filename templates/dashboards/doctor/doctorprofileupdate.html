@@ -1,34 +1,73 @@
 {% extends 'layout2.html' %}
 {% block title %}
-	Doctor-Profile
-{% endblock  %}
+    Doctor Profile
+{% endblock %}
 {% block css %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/doctorprofile.css') }}">
 {% endblock %}
 {% block content %}
 <div class="container rounded bg-white mt-5 mb-5">
     <div class="row">
-        <!-- Profile Picture Section -->
-        <div class="col-md-3 border-right">
-            <div class="d-flex flex-column align-items-center text-center p-3 py-5">
-                <form action="/upload_profile_pic" method="POST" enctype="multipart/form-data">
-                    <img class="rounded-circle mt-5" width="150px" 
-                         src="" id="profilePicPreview">
-                    <input type="file" class="form-control mt-3" id="profilePicInput" name="profile_photo" onchange="previewProfilePic(event)">
-                    <button type="submit" class="btn btn-primary mt-3">Upload Picture</button>
-                </form>
-                <h4 class="font-weight-bold mt-3">{{session['username']}}</h4>
-                <span class="text-muted"></span>
-                <span class="text-muted"></span>
-                <span class="text-muted mt-2">Working at: <strong></strong></span>
-                <span class="text-muted mt-2">Comments: <strong></strong></span>
-            </div>
-        </div>
-        
         <!-- Doctor Information Section -->
-        <div class="col-md-9">
+        <div class="col-md-12">
             <div class="p-3 py-5">
-                
+                {% if flash %}
+                    
+                {{ get_flashed_messages() }}
+                {% endif %}
+                <h4 class="mb-4">Doctor Information</h4>
+                <!-- Use Flask-WTF Form -->
+                <form method="POST" action="{{ url_for('doctorProfileUpdate') }}">
+                    {{ form.hidden_tag() }}
+                    <div class="row mt-2">
+                        <div class="col-md-6">
+                            <label class="labels">Name</label>
+                            {{ form.name(class="form-control", value=doctor['name']) }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="labels">Specialization</label>
+                            {{ form.specialization(class="form-control", value=doctor['specialization']) }}
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <label class="labels">Experience (in years)</label>
+                            {{ form.experience(class="form-control", value=doctor['experience']) }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="labels">Qualifications</label>
+                            {{ form.qualifications(class="form-control", value=doctor['qualifications']) }}
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <label class="labels">Contact Number</label>
+                            {{ form.contact_number(class="form-control", value=doctor['contact_number']) }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="labels">Email</label>
+                            {{ form.email(class="form-control", value=session['email']) }}
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <label class="labels">Clinic/Hospital Name</label>
+                            {{ form.clinic_hospital(class="form-control", value=doctor['clinic_hospital']) }}
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <label class="labels">Address</label>
+                            {{ form.address(class="form-control", value=doctor['address']) }}
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            {{ form.submit(class="btn btn-success btn-block") }}
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
