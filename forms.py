@@ -26,6 +26,7 @@ class DoctorProfileForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     clinic_hospital = StringField('Clinic/Hospital Name', validators=[DataRequired()])
     address = StringField('Address', validators=[DataRequired()])
+    gender = SelectField('Gender', choices=[('male', 'Male'), ('female', 'Female'), ('other', 'Other')], validators=[DataRequired()])
     submit = SubmitField('Submit')
    
     
@@ -37,8 +38,10 @@ class PatientProfileForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
     age = IntegerField('Age', validators=[DataRequired()])
     gender = SelectField('Gender', choices=[('male', 'Male'), ('female', 'Female'), ('other', 'Other')], validators=[DataRequired()])
+    blood_group = StringField('Blood Group', validators=[DataRequired()])
     contact_number = StringField('Contact Number', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
     address = StringField('Address', validators=[DataRequired()])
     medical_history = TextAreaField('Medical History', validators=[Optional()])
     profile_photo = FileField('Profile Picture')
+    submit = SubmitField('Submit')

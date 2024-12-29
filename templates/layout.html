@@ -24,7 +24,7 @@
 <body>
 
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-light px-3">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top px-3">
     <!-- Replace the text "MyPropertyGuru" with an image -->
     <a class="navbar-brand" href="#">
       <img src="../static/images/logo.svg" alt="MyPropertyGuru" height="40"> <!-- Replace with your logo image -->
@@ -56,9 +56,11 @@
       </div>
     </div>
   </nav>
-  {% block content %}
-  
-  {% endblock %}
+  <div class="container rounded bg-white mt-5 mb-5">
+    {% block content %}
+    
+    {% endblock %}
+  </div>
   <!-- Footer Section --><script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
 
   <div class="with-footer">

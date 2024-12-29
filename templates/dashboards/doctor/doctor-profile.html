@@ -15,15 +15,14 @@
             <div class="col-lg-4">
                 <div class="card mb-4">
                     <div class="card-body text-center">
-                        <img src="" alt="avatar"
-                             class="rounded-circle img-fluid" style="width: 150px;">
+                        {% if doctor.gender.upper()=="FEMALE"  %}
+                            <img src="../../../static/images/profile/female.png" alt="avatar"class="rounded-circle img-fluid" style="width: 180px;">
+                        {% else %}
+                            <img src="../../../static/images/profile/male.png" alt="avatar"class="rounded-circle img-fluid" style="width: 180px;">
+                        {% endif %}
                         <h5 class="my-3">{{ doctor.name }}</h5>
                         <p class="text-muted mb-1">Specialization: {{ doctor.specialization }}</p>
                         <p class="text-muted mb-4">Experience: {{ doctor.experience }} years</p>
-                        <div class="d-flex justify-content-center mb-2">
-                            <button type="button" class="btn btn-primary">Follow</button>
-                            <button type="button" class="btn btn-outline-primary ms-1">Message</button>
-                        </div>
                     </div>
                 </div>
                 <div class="card mb-4 mb-lg-0">
@@ -37,6 +36,7 @@
                                 <i class="fas fa-phone fa-lg text-body"></i>
                                 <p class="mb-0">{{ doctor.contact_number }}</p>
                             </li>
+                            
                         </ul>
                     </div>
                 </div>
@@ -68,6 +68,14 @@
                             </div>
                             <div class="col-sm-9">
                                 <p class="text-muted mb-0">{{ doctor.experience }} years</p>
+                            </div>
+                        </div>
+                        <hr><div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Gender</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0">{{ doctor.gender }} </p>
                             </div>
                         </div>
                         <hr>

@@ -11,7 +11,7 @@ from flask_pymongo import PyMongo
 from api_keys import mongodb
 
 #Form imports
-from forms import SignupForm,DoctorProfileForm
+from forms import SignupForm,DoctorProfileForm,PatientProfileForm
 
 
 
@@ -34,28 +34,17 @@ app.config['GOOGLE_CLIENT_SECRET'] = google_keys['client_secret']
 app.config['GOOGLE_DISCOVERY_URL'] = 'https://accounts.google.com/.well-known/openid-configuration'
 
 
-from datetime import timedelta
-
 
 
 #session config
 app.config['SESSION_TYPE'] = 'mongodb'
-app.config['SESSION_PERMANENT'] = True 
-app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=1)  
+app.config['SESSION_PERMANENT'] = False
 app.config['SESSION_USE_SIGNER'] = True
 app.config['SESSION_MONGODB'] = mongo.cx
 app.config['SESSION_MONGODB_DB'] = 'health_care'
 app.config['SESSION_MONGODB_COLLECT'] = 'sessions'
 
 Session(app)
-
-
-
-
-
-
-
-
 
 
 # Initialize OAuth
@@ -118,17 +107,6 @@ def google_choose():
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 #MAIN PAGES
 
 #HOME PAGE
@@ -162,35 +140,6 @@ def contactPage():
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
 #login Pages
 #patientLoginPage
 
@@ -241,15 +190,17 @@ def dashboardPage():
     else:
         patient_data = mongo.db.patient_profile.find_one({'email': email})
         if patient_data:
-            return render_template('/dashboards/patient/patientprofile.html', data=patient_data)
+            return render_template('/dashboards/patient/patient-profile.html', patient=patient_data)
         else:
             return redirect(url_for('patientProfileUpdate'))
     return render_template('/dashboards/profile.html')  
 
+
+
+
+
 @app.route('/doctor/profile/update', methods=['GET', 'POST'])
 def doctorProfileUpdate():
-  
-    
     form = DoctorProfileForm()
     email = session.get('email')
     
@@ -260,9 +211,7 @@ def doctorProfileUpdate():
     doctor = mongo.db.doctors_profile.find_one({'email': email})
     
     if request.method == 'POST':
-
         if form.validate_on_submit():
-        
             profile_data = {
                 'name': form.name.data.upper(),
                 'specialization': form.specialization.data.upper(),
@@ -271,18 +220,22 @@ def doctorProfileUpdate():
                 'contact_number': form.contact_number.data,
                 'clinic_hospital': form.clinic_hospital.data.upper(),
                 'address': form.address.data.upper(),
-                  # Handle image upload appropriately
+                'gender': form.gender.data.capitalize()  # To ensure proper capitalization
             }
-            print(profile_data)
             
-            if doctor:
-                mongo.db.doctors_profile.update_one({'email': email}, {'$set': profile_data})
-            else:
-                profile_data['email'] = email
-                mongo.db.doctors_profile.insert_one(profile_data)
-            
-            flash("Profile updated successfully!", "success")
-            return redirect(url_for('dashboardPage'))
+            try:
+                if doctor:
+                    # Update the doctor's profile if it already exists
+                    mongo.db.doctors_profile.update_one({'email': email}, {'$set': profile_data})
+                else:
+                    # Insert the new profile if the doctor doesn't exist
+                    profile_data['email'] = email
+                    mongo.db.doctors_profile.insert_one(profile_data)
+                
+                flash("Profile updated successfully!", "success")
+                return redirect(url_for('dashboardPage'))
+            except Exception as e:
+                flash(f"An error occurred: {e}", "danger")
         else:
             flash("Please correct the errors in the form.", "danger")
     
@@ -298,72 +251,57 @@ def doctorProfileUpdate():
     
     return render_template('/dashboards/doctor/doctorprofileupdate.html', form=form, doctor=doctor)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+@app.route('/patient/profile/update', methods=['GET', 'POST'])
+def patientProfileUpdate():
+    form = PatientProfileForm()
+    email = session.get('email')
+    if not email:
+        flash("Unauthorized access. Please log in.", "danger")
+        return redirect(url_for('loginPage'))
+    
+    patient = mongo.db.patient_profile.find_one({'email': email})
+    
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            profile_data = {
+                'name': form.name.data.upper(),
+                'age': form.age.data,
+                'gender': form.gender.data.upper(),
+                'blood_group': form.blood_group.data.upper(),
+                'contact_number': form.contact_number.data,
+                'email': email,
+                'address': form.address.data.upper(),
+                'medical_history': form.medical_history.data.upper()
+            }
+            
+            try:
+                if patient:
+                    # Update the patient's profile if it already exists
+                    mongo.db.patient_profile.update_one({'email': email}, {'$set': profile_data})
+                else:
+                    # Insert a new profile if it doesn't exist
+                    profile_data['email'] = email
+                    mongo.db.patient_profile.insert_one(profile_data)
+                
+                flash("Profile updated successfully!", "success")
+                return redirect(url_for('dashboardPage'))
+            except Exception as e:
+                flash(f"An error occurred: {e}", "danger")
+    
+    # Populate form fields with existing data if available
+    if patient:
+        form.name.data = patient.get('name')
+        form.age.data = patient.get('age')
+        form.gender.data = patient.get('gender')
+        form.blood_group.data = patient.get('blood_group')
+        form.contact_number.data = patient.get('contact_number')
+        form.address.data = patient.get('address')
+        form.medical_history.data = patient.get('medical_history')
+    
+    return render_template('/dashboards/patient/patientprofileupdate.html', form=form, patient=patient)
 
 
 #Signup page
-
-
-
-
-
 #doctorSignupPage
 @app.route('/signup/doctor', methods=['GET', 'POST'])
 def signupPage():
@@ -386,13 +324,12 @@ def signupPage():
     return render_template('signup/signup.html', form=form)
 
 
-
-
-
-
 @app.route('/dashboards/top-doctors.html')
 def topDoctorsPage():
     return render_template('/dashboards/top-doctors.html')
+
+
+
 
 
 
@@ -474,5 +411,5 @@ def logout():
 
 
 
-# if __name__=='__main__':
-#    app.run(debug=True,port=3961) 
+if __name__=='__main__':
+   app.run(debug=True,port=3961) 
