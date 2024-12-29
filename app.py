@@ -263,11 +263,11 @@ def dashboardPage():
             return render_template('/dashboards/patient/patientprofile.html', data=patient_data)
         else:
             return redirect(url_for('patientProfileUpdate'))
-    return render_template('/dashboards/profile.html')  # Fallback for unexpected cases
+    return render_template('/dashboards/profile.html')  
 
 @app.route('/doctor/profile/update', methods=['GET', 'POST'])
 def doctorProfileUpdate():
-    print(1)
+  
     
     form = DoctorProfileForm()
     email = session.get('email')
@@ -279,9 +279,9 @@ def doctorProfileUpdate():
     doctor = mongo.db.doctors_profile.find_one({'email': email})
     
     if request.method == 'POST':
-        print(2)
+
         if form.validate_on_submit():
-            print(3)
+        
             profile_data = {
                 'name': form.name.data.upper(),
                 'specialization': form.specialization.data.upper(),
@@ -297,7 +297,6 @@ def doctorProfileUpdate():
             if doctor:
                 mongo.db.doctors_profile.update_one({'email': email}, {'$set': profile_data})
             else:
-                print('jiii')
                 profile_data['email'] = email
                 mongo.db.doctors_profile.insert_one(profile_data)
             
@@ -494,5 +493,5 @@ def logout():
 
 
 
-if __name__=='__main__':
-   app.run(debug=True,port=3961) 
+# if __name__=='__main__':
+#    app.run(debug=True,port=3961) 
