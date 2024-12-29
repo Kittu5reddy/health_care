@@ -224,25 +224,6 @@ def loginPage():
 ##
 #DASHBOARD PAGES
 ##  
-##
-# @app.route('/dashboard')
-# def dashboardPage():
-#     if session.get('email') is None:
-#         return redirect(url_for('loginPage'))
-#     if session.get('is_doctor'):
-#         if mongo.db.doctors_profile.find_one({'email':session.get('email')}):
-#             data = mongo.db.doctors_profile.find_one({'email':session.get('email')})
-#             return render_template('/dashboards/doctor/doctor-profile.html',data=data)
-#         else:
-#             return redirect(url_for('doctorProfileUpdate'))
-#     # else:
-#     #     if mongo.db.patient_profile.find_one({'email':session.get('email')}):
-#     #         data = mongo.db.patient_profile.find_one({'email':session.get('email')})
-#     #         return render_template('/dashboards/doctor/patientprofile.html',data=data)
-#     #     else:
-#     #         return redirect(url_for('patientUpdateProfilePage'))
-#     return render_template('/dashboards/profile.html')
-
 
 @app.route('/dashboard')
 def dashboardPage():
