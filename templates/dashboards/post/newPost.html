@@ -1,0 +1,69 @@
+{% extends 'layout2.html' %}
+{% block content %}
+    
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <h1>Report a Problem</h1>
+            
+            <form action="" method="POST" enctype="multipart/form-data">
+                
+                
+                <!-- Customer Name -->
+                <div class="form-group">
+                    <label for="name">Full Name <span class="require">*</span></label>
+                    <input type="text" class="form-control" name="name" required value="{{ session['username'] }}" />
+                </div>
+                
+      
+                <div class="form-group">
+                    <label for="email">Email Address <span class="require">*</span></label>
+                    <input type="email" class="form-control" name="email" required value="{{session['email']}}" />
+                </div>
+                
+                <!-- Contact Number -->
+                <div class="form-group">
+                    <label for="contact">Contact Number <span class="require">*</span></label>
+                    <input type="tel" class="form-control" name="contact" pattern="[0-9]{10}" required  />
+                    <small class="form-text text-muted">Enter a 10-digit mobile number.</small>
+                </div>
+                
+                <!-- Problem Title -->
+                <div class="form-group">
+                    <label for="title">Problem Title <span class="require">*</span></label>
+                    <input type="text" class="form-control" name="title" required />
+                </div>
+                
+                <!-- Problem Description -->
+                <div class="form-group">
+                    <label for="description">Problem Description <span class="require">*</span></label>
+                    <textarea rows="5" class="form-control" name="description" placeholder="Describe your problem in detail" required></textarea>
+                </div>
+                
+                <!-- Attach Files -->
+                <div class="form-group">
+                    <label for="files">Attach Files (optional)</label>
+                    <input type="file" class="form-control" name="files" multiple />
+                    <small class="form-text text-muted">You can attach images, documents, or other relevant files.</small>
+                </div>
+                
+                <!-- Submit Button -->
+                <div class="form-group">
+                    <p><span class="require">*</span> - required fields</p>
+                </div>
+                
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">
+                        Submit
+                    </button>
+                    <button type="button" class="btn btn-default" onclick="window.location.href='/'">
+                        Cancel
+                    </button>
+                </div>
+                
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

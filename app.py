@@ -198,7 +198,6 @@ def dashboardPage():
 
 
 
-
 @app.route('/doctor/profile/update', methods=['GET', 'POST'])
 def doctorProfileUpdate():
     form = DoctorProfileForm()
@@ -336,7 +335,9 @@ def topDoctorsPage():
 
 
 
-
+@app.route('/post')
+def postPage():
+    return render_template('/dashboards/post/newPost.html')
 
 
 
