@@ -8,6 +8,7 @@ google_keys = {
     "redirect_uris":["http://127.0.0.1:3961/google/authorize"]
 }
 
+SECRET_KEY='jikjbdsudfskdmsudvdusv'
 
 mongodb={
     "url":"mongodb+srv://22eg107c61:kaushik@cluster0.x4y4x.mongodb.net/health_care?retryWrites=true&w=majority"

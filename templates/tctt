@@ -1,0 +1,8 @@
+<!-- Attach Files
+    <div class="form-group">
+        {{ form.files.label(class="control-label") }}
+        {{ form.files(class="form-control", multiple=True) }}
+        {% for error in form.files.errors %}
+            <small class="text-danger">{{ error }}</small>
+        {% endfor %}
+    </div> -->

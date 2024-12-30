@@ -28,7 +28,11 @@ app=Flask(__name__)
 app.config['MONGO_URI'] = mongodb['url']
 mongo = PyMongo(app)
 bycrypt = Bcrypt(app)
-app.config['SECRET_KEY'] = 'your_secret_key_here'  
+
+from api_keys import SECRET_KEY
+
+app.config['SECRET_KEY'] = SECRET_KEY 
+#app
 app.config['GOOGLE_CLIENT_ID'] = google_keys['client_id']
 app.config['GOOGLE_CLIENT_SECRET'] = google_keys['client_secret']
 app.config['GOOGLE_DISCOVERY_URL'] = 'https://accounts.google.com/.well-known/openid-configuration'
@@ -151,6 +155,7 @@ def loginPage():
                 session['email'] = str(user['email'])  
                 session['username'] = str(user['username'])
                 session['is_doctor'] = is_doctor
+                session['object_id'] = str(user['_id'])
                 return redirect(url_for('dashboardPage'))
             else:
                 return render_template('/login/login.html', message="Invalid credentials")
@@ -213,7 +218,9 @@ def doctorProfileUpdate():
                 'contact_number': form.contact_number.data,
                 'clinic_hospital': form.clinic_hospital.data.upper(),
                 'address': form.address.data.upper(),
-                'gender': form.gender.data.capitalize()  # To ensure proper capitalization
+                'gender': form.gender.data.capitalize() , # To ensure proper capitalization
+                'user_id': session.get('object_id'),
+                'no_posts':0
             }
             
             try:
@@ -264,9 +271,12 @@ def patientProfileUpdate():
                 'contact_number': form.contact_number.data,
                 'email': email,
                 'address': form.address.data.upper(),
-                'medical_history': form.medical_history.data.upper()
+                'medical_history': form.medical_history.data.upper(),
+                'user_id': session.get('object_id'),
+                'no_posts':0
             }
-            
+            if  session['email'] != profile_data['email']:
+                mongo.db.patient_user.update_one({'email': session['email']}, {'$set': {'email': email}})
             try:
                 if patient:
                     # Update the patient's profile if it already exists
@@ -306,6 +316,7 @@ def signupPage():
             password = form.password.data
             isDoctor = form.isDoctor.data
             collection = mongo.db.doctors_users if isDoctor else mongo.db.patient_users
+            
             if collection.find_one({'email':email}):
                 return render_template('signup/signup.html', form=form,message="Email already exists")
             else:
@@ -333,22 +344,22 @@ def mycomments():
 @app.route("/post", methods=["GET", "POST"])
 def postPage():
     form = ReportProblemForm()
-    if form.validate_on_submit():
-        name = form.name.data
-        email = form.email.data
-        contact = form.contact.data
-        title = form.title.data
-        description = form.description.data
-        files = form.files.data
-
-        # Save files if uploaded
-        if files:
-            for file in files:
-                file.save(f"uploads/{file.filename}")  # Save files to an 'uploads' folder
-
-        flash("Your problem has been submitted successfully!", "success")
-        return redirect(url_for("general"))
-
+    if request.method == "POST":
+        if form.validate_on_submit():
+            data = {
+            "name": form.name.data,
+            "email": form.email.data,
+            "contact": form.contact.data,
+            "title": form.title.data,
+            "description": form.description.data,
+            "patient_id": session.get("object_id"),
+            }
+            mongo.db.posts.insert_one(data)
+            mongo.db.patient_profile.update_one({"email": session.get("email")},{"$inc": {"no_posts": 1}})
+            flash("Your problem has been submitted successfully!", "success")
+            return redirect(url_for("general"))
+        else:
+            flash("Please correct the errors in the form.", "danger")
     return render_template("dashboards/post/newPost.html", form=form)
 
 
@@ -358,14 +369,21 @@ def postPage():
 
 @app.route("/general", methods=["GET", "POST"])
 def general():
-    return render_template("dashboards/post/general.html")
+    per_page = 3  # Number of posts per page
+    page = int(request.args.get("page", 1))  # Get the current page, default is 1
+    skip = (page - 1) * per_page  # Calculate the number of documents to skip
 
+    # Fetch posts with limit and skip for pagination
+    posts = list(mongo.db.posts.find().skip(skip).limit(per_page))
+    total_posts = mongo.db.posts.count_documents({})  # Total number of posts
+    total_pages = -(-total_posts // per_page)  # Calculate total pages (ceiling division)
 
-
-
-
-
-
+    return render_template(
+        "dashboards/post/general.html",
+        posts=posts,
+        current_page=page,
+        total_pages=total_pages
+    )
 
 
 

@@ -10,13 +10,13 @@
         <div class="col-md-8 col-md-offset-2">
             <h1>Report a Problem</h1>
             
-            <form method="POST" enctype="multipart/form-data">
+            <form method="POST" action="{{ url_for('postPage') }}" enctype="multipart/form-data">
                 {{ form.hidden_tag() }}
                 
                 <!-- Customer Name -->
                 <div class="form-group">
                     {{ form.name.label(class="control-label") }}
-                    {{ form.name(class="form-control") }}
+                    {{ form.name(class="form-control",value= session['user']  ) }}
                     {% for error in form.name.errors %}
                         <small class="text-danger">{{ error }}</small>
                     {% endfor %}
@@ -25,7 +25,7 @@
                 <!-- Email Address -->
                 <div class="form-group">
                     {{ form.email.label(class="control-label") }}
-                    {{ form.email(class="form-control") }}
+                    {{ form.email(class="form-control",value= session['email']) }}
                     {% for error in form.email.errors %}
                         <small class="text-danger">{{ error }}</small>
                     {% endfor %}
@@ -58,14 +58,7 @@
                     {% endfor %}
                 </div>
                 
-                <!-- Attach Files -->
-                <div class="form-group">
-                    {{ form.files.label(class="control-label") }}
-                    {{ form.files(class="form-control", multiple=True) }}
-                    {% for error in form.files.errors %}
-                        <small class="text-danger">{{ error }}</small>
-                    {% endfor %}
-                </div>
+               
                 
                 <!-- Submit and Cancel -->
                 <div class="form-group">
@@ -74,7 +67,6 @@
                 
                 <div class="form-group">
                     {{ form.submit(class="btn btn-primary") }}
-
                 </div>
                 
             </form>

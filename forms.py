@@ -83,11 +83,11 @@ class ReportProblemForm(FlaskForm):
         ],
         render_kw={"class": "form-control", "rows": 3, "placeholder": "Describe your problem in detail"},
     )
-    files = FileField(
-        "Attach Files",
-        validators=[
-            FileAllowed(["jpg", "jpeg", "png", "pdf", "doc", "docx"], "Invalid file format"),
-        ],
-        render_kw={"class": "form-control", "multiple": True},
-    )
+    # files = FileField(
+    #     "Attach Files",
+    #     validators=[
+    #         FileAllowed(["jpg", "jpeg", "png", "pdf", "doc", "docx"], "Invalid file format"),
+    #     ],
+    #     render_kw={"class": "form-control", "multiple": True},
+    # )
     submit = SubmitField("Submit", render_kw={"class": "btn btn-primary"})

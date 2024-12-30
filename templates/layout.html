@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}{% endblock  %}
-  </title>
+  <title>{% block title %}{% endblock %}</title>
   <!-- Bootstrap CSS -->
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
   <link rel="shortcut icon" href="../static/images/logo.svg" type="image/x-icon">
@@ -12,129 +11,136 @@
   {% block css %}{% endblock %}
 </head>
 <style>
+  /* Make sure the body takes at least 100% height */
+  html, body {
+    height: 100%;
+    margin: 0;
+  }
+
+  /* Set the main content area to flex and take all available space */
+  .content-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  /* Push footer to the bottom of the page */
+  .footer {
+    margin-top: auto;
+  }
+
   /* Add a background image */
   body {
     background-image: url('../static/images/bg.jpg'); /* Replace with your image URL */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    height: 100vh;
   }
 </style>
 <body>
-
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top px-3">
-    <!-- Replace the text "MyPropertyGuru" with an image -->
-    <a class="navbar-brand" href="#">
-      <img src="../static/images/logo.svg" alt="MyPropertyGuru" height="40"> <!-- Replace with your logo image -->
-    </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <!-- Align navbar items to the left -->
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <a class="nav-link" href="{{url_for('homePage')}}">Home</a>
-        </li>
-        <li class="nav-item">
-          {% if session['username'] %}
-            
-          <a class="nav-link" href="{{url_for('topDoctorsPage')}}">Top Doctors</a>
-          {% else %}
-            
-          <a class="nav-link" href="{{url_for('aboutPage')}}">About</a>
-          {% endif %}
-        </li>
-        <li class="nav-item">
-          {% if session['username'] %}
-          <a class="nav-link" href="{{url_for('general')}}">General</a>
-          {% else %}
-          <a class="nav-link" href="{{url_for('servicesPage')}}">Services</a>
-          {% endif %}
-        </li>
-        <li class="nav-item">
-          {% if session['username'] %}
-            {% if session['is_doctor'] %}
-            <a class="nav-link" href="{{ url_for('mycomments') }}">My Comments</a>
+  <div class="content-wrapper">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top px-3">
+      <a class="navbar-brand" href="#">
+        <img src="../static/images/logo.svg" alt="MyPropertyGuru" height="40"> <!-- Replace with your logo image -->
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="{{url_for('homePage')}}">Home</a>
+          </li>
+          <li class="nav-item">
+            {% if session['username'] %}
+            <a class="nav-link" href="{{url_for('topDoctorsPage')}}">Top Doctors</a>
             {% else %}
-            <a class="nav-link" href="{{url_for('newPost')}}">Make Post</a>
+            <a class="nav-link" href="{{url_for('aboutPage')}}">About</a>
             {% endif %}
+          </li>
+          <li class="nav-item">
+            {% if session['username'] %}
+            <a class="nav-link" href="{{url_for('general')}}">General</a>
+            {% else %}
+            <a class="nav-link" href="{{url_for('servicesPage')}}">Services</a>
+            {% endif %}
+          </li>
+          <li class="nav-item">
+            {% if session['username'] %}
+              {% if session['is_doctor'] %}
+              <a class="nav-link" href="{{ url_for('mycomments') }}">My Comments</a>
+              {% else %}
+              <a class="nav-link" href="{{url_for('postPage')}}">Make Post</a>
+              {% endif %}
             {% else %}
             <a class="nav-link" href="{{url_for('donatePage')}}">Donate</a>
+            {% endif %}
+          </li>
+        </ul>
+        <div class="d-flex space-between">
+          {% if session['username'] %}
+          <a href="{{url_for('dashboardPage')}}" class="btn btn-primary me-1">Profile</a>
+          {% else %}
+          <a href="{{url_for('loginPage')}}" class="btn btn-primary me-1">Login</a>
           {% endif %}
-        </li>
-        
-      </ul>
-      
-      <!-- Align buttons to the right -->
-      <div class="d-flex space-between">
-        {% if session['username'] %}  
-        <a href="{{url_for('dashboardPage')}}" class="btn btn-primary me-1">Profile</a>
-        {% else %}
-        <a href="{{url_for('loginPage')}}" class="btn btn-primary me-1">Login</a>
-        {% endif %}
-        {% if session['username'] %}
-        <a href="{{url_for('logout')}}" class="btn btn-success" >Logout</a>
-          
-        {% else %}
-          
-        <a href="{{url_for('signupPage')}}" class="btn btn-success" >Sign Up</a>
-        {% endif %}
+          {% if session['username'] %}
+          <a href="{{url_for('logout')}}" class="btn btn-success">Logout</a>
+          {% else %}
+          <a href="{{url_for('signupPage')}}" class="btn btn-success">Sign Up</a>
+          {% endif %}
+        </div>
       </div>
+    </nav>
+
+    <div class="container rounded bg-white mt-5 mb-5">
+      {% block content %}
+      {% endblock %}
     </div>
-  </nav>
-  <div class="container rounded bg-white mt-5 mb-5">
-    {% block content %}
-    
-    {% endblock %}
-  </div>
-  <!-- Footer Section --><script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
 
-  <div class="with-footer">
-    <footer class="bg-dark text-center text-white">
-      <!-- Social media section -->
-      <div class="container p-4">
-        <section class="mb-4">
-          <!-- Facebook -->
-          <a class="btn btn-outline-light btn-floating m-1" href="" role="button">
-            <i class="fab fa-facebook-f"></i>
-          </a>
+    <!-- Footer Section -->
+    <div class="footer">
+      <footer class="bg-dark text-center text-white">
+        <div class="container p-4">
+          <section class="mb-4">
+            <!-- Facebook -->
+            <a class="btn btn-outline-light btn-floating m-1" href="" role="button">
+              <i class="fab fa-facebook-f"></i>
+            </a>
 
-          <!-- Twitter -->
-          <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button">
-            <i class="fab fa-twitter"></i>
-          </a>
+            <!-- Twitter -->
+            <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button">
+              <i class="fab fa-twitter"></i>
+            </a>
 
-          <!-- Google -->
-          <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button">
-            <i class="fab fa-google"></i>
-          </a>
+            <!-- Google -->
+            <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button">
+              <i class="fab fa-google"></i>
+            </a>
 
-          <!-- Instagram -->
-          <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button">
-            <i class="fab fa-instagram"></i>
-          </a>
+            <!-- Instagram -->
+            <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button">
+              <i class="fab fa-instagram"></i>
+            </a>
 
-          <!-- LinkedIn -->
-          <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button">
-            <i class="fab fa-linkedin-in"></i>
-          </a>
+            <!-- LinkedIn -->
+            <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button">
+              <i class="fab fa-linkedin-in"></i>
+            </a>
 
-          <!-- GitHub -->
-          <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button">
-            <i class="fab fa-github"></i>
-          </a>
-        </section>
-      </div>
+            <!-- GitHub -->
+            <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button">
+              <i class="fab fa-github"></i>
+            </a>
+          </section>
+        </div>
 
-      <!-- Copyright -->
-      <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
-        © 2024 Copyright:
-        <a class="text-white" href="https://example.com/">YourWebsite.com</a>
-      </div>
-    </footer>
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+          © 2024 Copyright:
+          <a class="text-white" href="https://example.com/">YourWebsite.com</a>
+        </div>
+      </footer>
+    </div>
   </div>
 
   <!-- Bootstrap JS and dependencies -->
@@ -142,14 +148,11 @@
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-
-
-
   <df-messenger
-intent="WELCOME"
-chat-title="HEALTH_BOT"
-agent-id="f19e6af5-271a-40a3-8ea9-32f256d88412"
-language-code="en"
-></df-messenger>
+    intent="WELCOME"
+    chat-title="HEALTH_BOT"
+    agent-id="f19e6af5-271a-40a3-8ea9-32f256d88412"
+    language-code="en"
+  ></df-messenger>
 </body>
 </html>
