@@ -97,13 +97,13 @@ def google_choose():
         if is_doctor:
             if mongo.db.doctors_profile.find_one({'email':session.get('email')}):
                 data = mongo.db.doctors_profile.find_one({'email':session.get('email')})
-                return render_template('/dashboards/doctorprofile.html',data=data)
+                return render_template('/dashboards/doctor-profile.html',data=data)
             else:
                 return redirect(url_for('doctorProfileUpdate'))
         else:
             if mongo.db.patient_profile.find_one({'email':session.get('email')}):
                 data = mongo.db.patient_profile.find_one({'email':session.get('email')})
-                return render_template('/dashboards/patientprofile.html',data=data)
+                return render_template('/dashboards/patient-profile.html',data=data)
             else:
                 return redirect(url_for('patientUpdateProfilePage'))
         
