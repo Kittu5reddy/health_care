@@ -1,4 +1,8 @@
-{% extends 'layout2.html' %}
+{% extends 'layout.html' %}
+
+{% block title %}
+    New-Post
+{% endblock  %}
 {% block content %}
     
 <div class="container">
@@ -6,59 +10,71 @@
         <div class="col-md-8 col-md-offset-2">
             <h1>Report a Problem</h1>
             
-            <form action="" method="POST" enctype="multipart/form-data">
-                
+            <form method="POST" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
                 
                 <!-- Customer Name -->
                 <div class="form-group">
-                    <label for="name">Full Name <span class="require">*</span></label>
-                    <input type="text" class="form-control" name="name" required value="{{ session['username'] }}" />
+                    {{ form.name.label(class="control-label") }}
+                    {{ form.name(class="form-control") }}
+                    {% for error in form.name.errors %}
+                        <small class="text-danger">{{ error }}</small>
+                    {% endfor %}
                 </div>
                 
-      
+                <!-- Email Address -->
                 <div class="form-group">
-                    <label for="email">Email Address <span class="require">*</span></label>
-                    <input type="email" class="form-control" name="email" required value="{{session['email']}}" />
+                    {{ form.email.label(class="control-label") }}
+                    {{ form.email(class="form-control") }}
+                    {% for error in form.email.errors %}
+                        <small class="text-danger">{{ error }}</small>
+                    {% endfor %}
                 </div>
                 
                 <!-- Contact Number -->
                 <div class="form-group">
-                    <label for="contact">Contact Number <span class="require">*</span></label>
-                    <input type="tel" class="form-control" name="contact" pattern="[0-9]{10}" required  />
-                    <small class="form-text text-muted">Enter a 10-digit mobile number.</small>
+                    {{ form.contact.label(class="control-label") }}
+                    {{ form.contact(class="form-control") }}
+                    {% for error in form.contact.errors %}
+                        <small class="text-danger">{{ error }}</small>
+                    {% endfor %}
                 </div>
                 
                 <!-- Problem Title -->
                 <div class="form-group">
-                    <label for="title">Problem Title <span class="require">*</span></label>
-                    <input type="text" class="form-control" name="title" required />
+                    {{ form.title.label(class="control-label") }}
+                    {{ form.title(class="form-control") }}
+                    {% for error in form.title.errors %}
+                        <small class="text-danger">{{ error }}</small>
+                    {% endfor %}
                 </div>
                 
                 <!-- Problem Description -->
                 <div class="form-group">
-                    <label for="description">Problem Description <span class="require">*</span></label>
-                    <textarea rows="5" class="form-control" name="description" placeholder="Describe your problem in detail" required></textarea>
+                    {{ form.description.label(class="control-label") }}
+                    {{ form.description(class="form-control") }}
+                    {% for error in form.description.errors %}
+                        <small class="text-danger">{{ error }}</small>
+                    {% endfor %}
                 </div>
                 
                 <!-- Attach Files -->
                 <div class="form-group">
-                    <label for="files">Attach Files (optional)</label>
-                    <input type="file" class="form-control" name="files" multiple />
-                    <small class="form-text text-muted">You can attach images, documents, or other relevant files.</small>
+                    {{ form.files.label(class="control-label") }}
+                    {{ form.files(class="form-control", multiple=True) }}
+                    {% for error in form.files.errors %}
+                        <small class="text-danger">{{ error }}</small>
+                    {% endfor %}
                 </div>
                 
-                <!-- Submit Button -->
+                <!-- Submit and Cancel -->
                 <div class="form-group">
                     <p><span class="require">*</span> - required fields</p>
                 </div>
                 
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary">
-                        Submit
-                    </button>
-                    <button type="button" class="btn btn-default" onclick="window.location.href='/'">
-                        Cancel
-                    </button>
+                    {{ form.submit(class="btn btn-primary") }}
+
                 </div>
                 
             </form>

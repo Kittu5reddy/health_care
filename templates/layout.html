@@ -39,20 +39,49 @@
           <a class="nav-link" href="{{url_for('homePage')}}">Home</a>
         </li>
         <li class="nav-item">
+          {% if session['username'] %}
+            
+          <a class="nav-link" href="{{url_for('topDoctorsPage')}}">Top Doctors</a>
+          {% else %}
+            
           <a class="nav-link" href="{{url_for('aboutPage')}}">About</a>
+          {% endif %}
         </li>
         <li class="nav-item">
+          {% if session['username'] %}
+          <a class="nav-link" href="{{url_for('general')}}">General</a>
+          {% else %}
           <a class="nav-link" href="{{url_for('servicesPage')}}">Services</a>
+          {% endif %}
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{url_for('donatePage')}}">Contact</a>
+          {% if session['username'] %}
+            {% if session['is_doctor'] %}
+            <a class="nav-link" href="{{ url_for('mycomments') }}">My Comments</a>
+            {% else %}
+            <a class="nav-link" href="{{url_for('newPost')}}">Make Post</a>
+            {% endif %}
+            {% else %}
+            <a class="nav-link" href="{{url_for('donatePage')}}">Donate</a>
+          {% endif %}
         </li>
+        
       </ul>
       
       <!-- Align buttons to the right -->
       <div class="d-flex space-between">
+        {% if session['username'] %}  
+        <a href="{{url_for('dashboardPage')}}" class="btn btn-primary me-1">Profile</a>
+        {% else %}
         <a href="{{url_for('loginPage')}}" class="btn btn-primary me-1">Login</a>
+        {% endif %}
+        {% if session['username'] %}
+        <a href="{{url_for('logout')}}" class="btn btn-success" >Logout</a>
+          
+        {% else %}
+          
         <a href="{{url_for('signupPage')}}" class="btn btn-success" >Sign Up</a>
+        {% endif %}
       </div>
     </div>
   </nav>

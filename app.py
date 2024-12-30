@@ -11,7 +11,7 @@ from flask_pymongo import PyMongo
 from api_keys import mongodb
 
 #Form imports
-from forms import SignupForm,DoctorProfileForm,PatientProfileForm
+from forms import SignupForm,DoctorProfileForm,PatientProfileForm,ReportProblemForm
 
 
 
@@ -128,12 +128,6 @@ def servicesPage():
 #DONATE PAGE
 @app.route('/donate')
 def donatePage():
-    return render_template('/main/donate.html')
-
-
-#CONTACT PAGE    
-@app.route('/contact')
-def contactPage():
     return render_template('/main/donate.html')
 
 
@@ -328,24 +322,43 @@ def topDoctorsPage():
     return render_template('/dashboards/top-doctors.html')
 
 
+@app.route('/dashboards/mycomments.html')
+def mycomments():
+    return render_template('/dashboards/doctor/mycomments.html')
 
 
 
 
 
-
-
-@app.route('/post')
+@app.route("/post", methods=["GET", "POST"])
 def postPage():
-    return render_template('/dashboards/post/newPost.html')
+    form = ReportProblemForm()
+    if form.validate_on_submit():
+        name = form.name.data
+        email = form.email.data
+        contact = form.contact.data
+        title = form.title.data
+        description = form.description.data
+        files = form.files.data
+
+        # Save files if uploaded
+        if files:
+            for file in files:
+                file.save(f"uploads/{file.filename}")  # Save files to an 'uploads' folder
+
+        flash("Your problem has been submitted successfully!", "success")
+        return redirect(url_for("general"))
+
+    return render_template("dashboards/post/newPost.html", form=form)
 
 
 
 
 
 
-
-
+@app.route("/general", methods=["GET", "POST"])
+def general():
+    return render_template("dashboards/post/general.html")
 
 
 
