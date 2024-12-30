@@ -372,10 +372,8 @@ def general():
     per_page = 3  # Number of posts per page
     page = int(request.args.get("page", 1))  # Get the current page, default is 1
     skip = (page - 1) * per_page  # Calculate the number of documents to skip
-
-    # Fetch posts with limit and skip for pagination
     posts = list(mongo.db.posts.find().skip(skip).limit(per_page))
-    total_posts = mongo.db.posts.count_documents({})  # Total number of posts
+    total_posts = mongo.db.posts.count_documents({})  
     total_pages = -(-total_posts // per_page)  # Calculate total pages (ceiling division)
 
     return render_template(
