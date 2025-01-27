@@ -25,11 +25,7 @@
                         <h3 class="md-heading"><a href="#">{{ post.title }}</a></h3>
                         <!-- Truncate description -->
                         <p>{{ post.description[:] }}</p>
-                       {% if session['is_doctor'] %}
-                       <a href="{{ url_for('makecomments') }}"><button>POST a Comment</button></a>
-                       <a href="{{ url_for('comments') }}"><button>View Comment</button></a>
-                        
-                       {% endif %}
+
                     </div>
                 </div>
             </div>

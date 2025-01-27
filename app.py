@@ -11,7 +11,7 @@ from flask_pymongo import PyMongo
 from api_keys import mongodb
 
 #Form imports
-from forms import SignupForm,DoctorProfileForm,PatientProfileForm,ReportProblemForm
+from forms import SignupForm,DoctorProfileForm,PatientProfileForm,ReportProblemForm,DoctorCommentForm
 
 
 
@@ -336,6 +336,27 @@ def topDoctorsPage():
 @app.route('/dashboards/mycomments.html')
 def mycomments():
     return render_template('/dashboards/doctor/mycomments.html')
+
+
+@app.route('/dashboards/makecomments.html',methods=["GET","POST"])
+def makecomments():
+    form = DoctorCommentForm()
+    if request.method == 'POST' and form.validate_on_submit():
+        doctor_name = form.name.data
+        comment = form.comment.data
+        patient=form.id.data
+        mongo.db.comments.insert_one({'doctor':doctor_name,"comment":comment,"patient":session['username']})
+        flash(f"Thank you, Dr. {doctor_name}. Your comment has been submitted.", "success")
+        
+        return redirect(url_for('comments'))
+    
+    return render_template('dashboards/post/makecomments.html', form=form)
+
+
+
+@app.route('/comments.html')
+def comments(data):
+    return render_template('/dashboards/post/comments.html',data=data)
 
 
 

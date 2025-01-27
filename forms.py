@@ -16,7 +16,11 @@ class SignupForm(FlaskForm):
     submit = SubmitField('Register')
     
     
-    
+class DoctorCommentForm(FlaskForm):
+    name = StringField("Doctor Name", validators=[DataRequired()])
+    comment = TextAreaField("Comment on Report", validators=[DataRequired()])
+    id=TextAreaField()
+    submit = SubmitField("Submit Comment") 
 
 class DoctorProfileForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
