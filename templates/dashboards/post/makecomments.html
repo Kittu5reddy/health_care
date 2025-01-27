@@ -10,7 +10,7 @@
         <div class="col-md-8 col-md-offset-2">
             <h1>Doctor Comment on Problem Report</h1>
             
-            <form method="POST" action="{{ url_for('makecomments') }}" >
+            <form method="POST" action="{{ url_for('makecomments') }}" enctype="multipart/form-data">
                 {{ form.hidden_tag() }}
                 
                 <!-- Doctor Name -->

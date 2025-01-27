@@ -332,32 +332,42 @@ def signupPage():
 def topDoctorsPage():
     return render_template('/dashboards/top-doctors.html')
 
+@app.route('/comments/<doctor>/<patient>')
+def comments(doctor, patient):
+    db=mongo.db.comments.find({'patient':patient})
 
-@app.route('/dashboards/mycomments.html')
+    return render_template('/dashboards/post/comments.html', post=db)
+
+
+
+
+@app.route('/dashboards/mycomments')
 def mycomments():
-    return render_template('/dashboards/doctor/mycomments.html')
+    data=list(mongo.db.comments.find({'doctor':session['username']}))
+    print(data)
+    return render_template('/dashboards/doctor/mycomments.html',posts=data)
 
 
-@app.route('/dashboards/makecomments.html',methods=["GET","POST"])
+@app.route('/dashboards/makecomments', methods=["GET", "POST"])
 def makecomments():
     form = DoctorCommentForm()
     if request.method == 'POST' and form.validate_on_submit():
         doctor_name = form.name.data
+        doctor=session['username']
         comment = form.comment.data
-        patient=form.id.data
-        mongo.db.comments.insert_one({'doctor':doctor_name,"comment":comment,"patient":session['username']})
+        patient = form.id.data
+        mongo.db.comments.insert_one({
+            'doctor_name': doctor_name,
+            'doctor':doctor,
+            "comment": comment,
+            "patient": session['username']
+        })
         flash(f"Thank you, Dr. {doctor_name}. Your comment has been submitted.", "success")
         
-        return redirect(url_for('comments'))
+        # Redirect with query parameters
+        return redirect(url_for('mycomments'))
     
     return render_template('dashboards/post/makecomments.html', form=form)
-
-
-
-@app.route('/comments.html')
-def comments(data):
-    return render_template('/dashboards/post/comments.html',data=data)
-
 
 
 

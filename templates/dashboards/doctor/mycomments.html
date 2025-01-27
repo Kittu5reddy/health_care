@@ -1,4 +1,44 @@
 {% extends 'layout.html' %}
+
 {% block title %}
-    My-Comments
-{% endblock  %}
+    General
+{% endblock %}
+{% block content %}
+<div class="container py-5">
+    <div class="col-md-12 col-lg-12">
+        {% for post in posts %}
+        <a href="">
+        <article class="post vt-post">
+            <div class="row">
+                <div class="col-xs-12 col-sm-5 col-md-5 col-lg-4">
+                    <div class="post-type post-img">
+                        <!-- Display dynamic image -->
+                        
+                            <img src=../../../static/images/profile/male.png class="img-responsive " alt="Post Image">
+                        
+                    </div>
+                    
+                </div>
+                <div class="col-xs-12 col-sm-7 col-md-7 col-lg-8">
+                    <div class="caption">
+                        <h4>{{post.patient}}</h4>
+                        <h4>{{post.name}}</h4>
+                        <h3 class="md-heading"><a href="#">{{ post.title }}</a></h3>
+                        <!-- Truncate description -->
+                        <p>{{ post.comment }}</p>
+                        
+                    </div>
+                </div>
+            </div>
+        </article>
+        </a>
+        <hr>
+        {% endfor %}
+
+        <!-- Pagination -->
+        
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+{% endblock %}
